@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,11 @@
 		61E751F52B19C44D00EE1B61 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E751F42B19C44D00EE1B61 /* ContentView.swift */; };
 		61E751F72B19C44F00EE1B61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61E751F62B19C44F00EE1B61 /* Assets.xcassets */; };
 		61E751FA2B19C44F00EE1B61 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61E751F92B19C44F00EE1B61 /* Preview Assets.xcassets */; };
+		61F89A0E2BAC321900805770 /* RSocketCombine in Frameworks */ = {isa = PBXBuildFile; productRef = 61F89A0D2BAC321900805770 /* RSocketCombine */; };
+		61F89A102BAC321900805770 /* RSocketCore in Frameworks */ = {isa = PBXBuildFile; productRef = 61F89A0F2BAC321900805770 /* RSocketCore */; };
+		61F89A122BAC321900805770 /* RSocketNIOChannel in Frameworks */ = {isa = PBXBuildFile; productRef = 61F89A112BAC321900805770 /* RSocketNIOChannel */; };
+		61F89A142BAC321900805770 /* RSocketReactiveSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 61F89A132BAC321900805770 /* RSocketReactiveSwift */; };
+		61F89A162BAC321900805770 /* RSocketTCPTransport in Frameworks */ = {isa = PBXBuildFile; productRef = 61F89A152BAC321900805770 /* RSocketTCPTransport */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +32,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61F89A102BAC321900805770 /* RSocketCore in Frameworks */,
+				61F89A0E2BAC321900805770 /* RSocketCombine in Frameworks */,
+				61F89A162BAC321900805770 /* RSocketTCPTransport in Frameworks */,
 				612E8BBE2B20B85D0044ED99 /* SwiftyJSON in Frameworks */,
+				61F89A122BAC321900805770 /* RSocketNIOChannel in Frameworks */,
+				61F89A142BAC321900805770 /* RSocketReactiveSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +105,11 @@
 			name = AbstractDemo;
 			packageProductDependencies = (
 				612E8BBD2B20B85D0044ED99 /* SwiftyJSON */,
+				61F89A0D2BAC321900805770 /* RSocketCombine */,
+				61F89A0F2BAC321900805770 /* RSocketCore */,
+				61F89A112BAC321900805770 /* RSocketNIOChannel */,
+				61F89A132BAC321900805770 /* RSocketReactiveSwift */,
+				61F89A152BAC321900805770 /* RSocketTCPTransport */,
 			);
 			productName = AbstractDemo;
 			productReference = 61E751EF2B19C44D00EE1B61 /* AbstractDemo.app */;
@@ -126,6 +141,7 @@
 			mainGroup = 61E751E62B19C44D00EE1B61;
 			packageReferences = (
 				612E8BBC2B20B85D0044ED99 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				61F89A0C2BAC321900805770 /* XCLocalSwiftPackageReference "../rsocket-swift" */,
 			);
 			productRefGroup = 61E751F02B19C44D00EE1B61 /* Products */;
 			projectDirPath = "";
@@ -359,6 +375,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		61F89A0C2BAC321900805770 /* XCLocalSwiftPackageReference "../rsocket-swift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../rsocket-swift";
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		612E8BBC2B20B85D0044ED99 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -375,6 +398,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 612E8BBC2B20B85D0044ED99 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		61F89A0D2BAC321900805770 /* RSocketCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RSocketCombine;
+		};
+		61F89A0F2BAC321900805770 /* RSocketCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RSocketCore;
+		};
+		61F89A112BAC321900805770 /* RSocketNIOChannel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RSocketNIOChannel;
+		};
+		61F89A132BAC321900805770 /* RSocketReactiveSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RSocketReactiveSwift;
+		};
+		61F89A152BAC321900805770 /* RSocketTCPTransport */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RSocketTCPTransport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
