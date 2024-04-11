@@ -11,59 +11,30 @@ import SwiftyJSON
 struct ContentView: View {
     @State private var responseData: JSON?
     @State private var isButtonClicked: Bool = false
+    @State private var errorMessage: String = ""
+    
     @State private var featureKey: String = ""
     @State private var customerId: String = ""
     @State private var clientId: String = ""
-    @State private var attributeKey: String = ""
-    @State private var attributeValue: String = ""
-    @State private var errorMessage: String = ""
+    
+    @State private var showFeatureKeyHistory: Bool = false
+    @State private var showCustomerIdHistory: Bool = false
+    @State private var showClientIdHistory: Bool = false
     
     var body: some View {
         VStack {
-            HStack {
-                Text("Feature Key: ")
-                TextField("" , text: $featureKey)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }.padding(5)
-            
-            HStack {
-                Text("Customer ID: ")
-                TextField("" , text: $customerId)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }.padding(5)
-            
-            HStack {
-                Text("Client ID: ")
-                TextField("" , text: $clientId)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }.padding(5)
-            
-            HStack {
-                Text("Attribute key: ")
-                TextField("" , text: $attributeKey)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }.padding(5)
-            
-            HStack {
-                Text("Attribute value: ")
-                TextField("" , text: $attributeValue)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }.padding(5)
+            InputTextField(title: "Feature Key:", key: "historyFeatureKey", content: $featureKey, showHistory: $showFeatureKeyHistory)
+            InputTextField(title: "Customer Id:", key: "historyCustomerIdKey", content: $customerId, showHistory: $showCustomerIdHistory)
+            InputTextField(title: "Client Id:", key: "historyClientIdKey", content: $clientId, showHistory: $showClientIdHistory)
         }
     
         Button(action: {
             isButtonClicked = true
+            saveInputContent()
             fetchData()
+            featureKey = ""
+            clientId = ""
+            customerId = ""
         }) {
             Text("点击我，发送请求")
                 .font(.headline)
@@ -119,6 +90,21 @@ struct ContentView: View {
         Spacer()
     }
     
+    func saveInputContent() {
+        addContentToHistory(key: "historyFeatureKey", value: featureKey)
+        addContentToHistory(key: "historyCustomerIdKey", value: customerId)
+        addContentToHistory(key: "historyClientIdKey", value: clientId)
+    }
+    
+    func addContentToHistory(key: String, value: String) {
+        var history = UserDefaults.standard.stringArray(forKey: key) ?? []
+        
+        if !history.contains(value) && !value.isEmpty {
+            history.append(value)
+            UserDefaults.standard.set(history, forKey: key)
+        }
+    }
+    
     func fetchData() {
         let featureKeyParam = featureKey.isEmpty ? "" : "/\(featureKey)"
         guard let url = URL(string: "http://127.0.0.1:8080/customers/featureConfigs\(featureKeyParam)") else {
@@ -128,8 +114,7 @@ struct ContentView: View {
         
         let params:[String: Any] = [
             "customerId": customerId,
-            "clientId": clientId,
-            "attributes": [attributeKey: attributeValue]
+            "clientId": clientId
         ]
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: params) else {
@@ -152,11 +137,6 @@ struct ContentView: View {
                 print("未接收到数据！")
                 return
             }
-            
-//            let json = JSON(data)
-//            DispatchQueue.main.async {
-//                self.responseData = json
-//            }
             
             // 将数据按照FeatureConfigResponseModel来进行解析
             do {
@@ -182,7 +162,41 @@ struct ContentView: View {
     }
 }
 
-
+struct InputTextField: View {
+    var title: String
+    var key: String
+    @Binding var content: String
+    @Binding var showHistory: Bool
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(title)
+                TextField("请输入\(title)", text: $content, onEditingChanged: { editingChanged in
+                    showHistory = editingChanged
+                })
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .onTapGesture {
+                    showHistory = true
+                }
+            }
+            if showHistory {
+                if let history = UserDefaults.standard.stringArray(forKey: key), !history.isEmpty {
+                    List(history, id: \.self) { item in
+                        Button(action: {
+                            content = item
+                            showHistory = false
+                        }){
+                            Text(item)
+                        }
+                    }
+                    .frame(height: 100)
+                }
+            }
+        }
+    }
+}
 
 struct FeatureConfigResponseModel: Codable {
     public let id: String
@@ -199,8 +213,4 @@ struct CustomerId: Codable {
     public let customerId: String
     public let clientId: String
     public let attributes: [String: String]?
-}
-
-#Preview {
-    ContentView()
 }
